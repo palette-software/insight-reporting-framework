@@ -1,0 +1,12 @@
+﻿DbConnector:
+    Host: staging-insight.palette-software.net
+    Port: 5432
+    User: palette_etl_user
+    Password: palette123
+    Database: palette
+    Schema: go_test
+
+SplunkServerAddress: "splunk-insight.palette-software.net"
+SplunkToken: "F59DC3B4-AAB9-4330-ACED-682E1681B507"
+
+LoadType: ???

@@ -7,6 +7,12 @@ import (
 	"fmt"
 )
 
+const jobVersion = "0.8"
+var noopHandler dbconn.ProcessRowFunc = func ([]string) error {
+	// Do not do anything
+	return nil
+}
+
 func main() {
 	log.AddTarget(os.Stdout, log.LevelDebug)
 
@@ -18,9 +24,8 @@ func main() {
 		log.Fatalf("Failed to parse DB connector config file: %v! Error: %v", config_file_path, err)
 	}
 
-	defer dbconn.CloseDB()
-
-	dbconnector := config.DbConnector
+	dbconnector := &config.DbConnector
+	defer dbconnector.CloseDB()
 
 	//sql_statement := "select * from palette.threadinfo limit 1"
 	//sql_statement := "select go_test.get_max_ts('go_test', 'threadinfo');"
@@ -46,7 +51,13 @@ func main() {
 		log.Errorf("Failed to execute query: %v! Error: %v", sql_statement, err)
 	}
 
-	err = logDataModelVersion(&dbconnector)
+	err = logDataModelVersion(dbconnector)
+	if err != nil {
+		log.Error(err)
+	}
+
+	loadType := "" // FIXME: Need to get load type from somewhere!
+	err = jobPiReportPThreadInfoNew(dbconnector, loadType)
 	if err != nil {
 		log.Error(err)
 	}
@@ -54,13 +65,13 @@ func main() {
 	log.Info("Finished Insight Reporting.")
 }
 
-func logDataModelVersion(dbconnector *dbconn.DbConnector) error {
+func logDataModelVersion(dbConnector *dbconn.DbConnector) error {
 	queryDataModelVersion := "select first_value(version_number) over (order by id desc) as model_version from " +
-		dbconnector.Schema + ".db_version_meta v limit 1"
+		dbConnector.Schema + ".db_version_meta v limit 1"
 
 	var version_number string
 
-	err := dbconnector.Query(queryDataModelVersion, func (columns []string) error {
+	err := dbConnector.Query(queryDataModelVersion, func (columns []string) error {
 		log.Debugf("Data Model version number: %v", version_number)
 		return nil
 	}, &version_number)
@@ -68,5 +79,27 @@ func logDataModelVersion(dbconnector *dbconn.DbConnector) error {
 	if err != nil {
 		return fmt.Errorf("Failed to get Data Model version! Error: %v", err)
 	}
+	return nil
+}
+
+func jobPiReportPThreadInfoNew(dbConnector *dbconn.DbConnector, loadType string) error {
+	jobName := "PI Report p_threadinfo_new"
+	sql := "set application_name = 'Palette Insight - Talend " + jobName  +" : "+ jobVersion + " ' "
+
+	err := dbConnector.Query(sql, noopHandler)
+	if err != nil {
+		return fmt.Errorf("Error in setting application name! Error: %v", err)
+	}
+
+	log.Info("Adding new partitions.")
+	sql = "select " + dbConnector.Schema +".manage_partitions('" + dbConnector.Schema +"', 'p_threadinfo')"
+	err = dbConnector.Query(sql, noopHandler)
+	if err != nil {
+		return fmt.Errorf("Error in managing partitions! Error: %v", err)
+	}
+
+	sql = "select "+ dbConnector.Schema + ".load_p_threadinfo('"+ dbConnector.Schema + "', '"
+		+ loadType +"') "
+
 	return nil
 }
