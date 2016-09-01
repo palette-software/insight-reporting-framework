@@ -1,22 +1,32 @@
 import psycopg2
 import yaml
+import logging
 
-print ("Hello World!")
+logging.basicConfig(filename='./insight-reporting.log', level=logging.DEBUG)
+logging.info('Start Insight Reporting.')
 
-fd = open("./Config.yml")
-f = fd.read()
-d = yaml.load(f)
+with open("./Config.yml") as fd:	
+	d = yaml.load(fd.read())
 
+with open("./workflow.yml") as fd:
+	wf = yaml.load(fd.read())
+
+
+schema_name = d["Schema"]
+	
 conn = psycopg2.connect("dbname={Database} user={User} password={Password} host={Host} port={Port}".format(**d))
-
 cur = conn.cursor()
-cur.execute("select * from palette.db_version_meta order by 1 desc limit 10;")
-for record in cur:
-    print (record)
-    ret = record[0]
+cur.execute("set search_path = " + schema_name)
+
+
+for i in wf:
+	cur.execute("select " + i.replace("#schema_name#", "'" + schema_name + "'"))
+	for record in cur: print (record[0])
 
 conn.commit();
 cur.close();
 conn.close();
 
-print (ret)
+
+
+logging.info('End Insight Reporting.')
