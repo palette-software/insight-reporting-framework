@@ -1,0 +1,113 @@
+- set application_name = 'Palette Insight - Talend {{jobName}}:{{jobVersion}}'
+#log job version
+#get data model version:
+- set search_path={{Schema}}
+- select first_value(version_number) over (order by id desc) as model_version from db_version_meta v limit 1
+- #PI_Report_p_threadinfo_new
+  - select manage_partitions('{{Schema}}', 'p_threadinfo')
+  - select load_p_threadinfo('{{Schema}}', '{{load_type}}')
+- #Report_truncate_s_serverlogs
+  - truncate table s_serverlogs
+
+- #Report_load_s_serverlogs_rest
+  - select load_s_serverlogs_rest('{{Schema}}')
+
+- #Report_load_s_serverlogs_vizql
+  - select load_s_serverlogs_vizql('{{Schema}}')
+
+- #Report_load_s_serverlogs_dataserver
+  - select load_s_serverlogs_dataserver('{{Schema}}')
+
+- #Report_load_s_serverlogs_tabproto
+  - select load_s_serverlogs_tabproto('{{Schema}}')
+
+- #Report_load_s_serverlogs_tdeserver
+  - select load_s_serverlogs_tdeserver('{{Schema}}')
+
+- #Report_load_p_serverlogs
+  - select manage_partitions('{{Schema}}', 'p_serverlogs')
+  - select delete_recent_records_from_p_serverlogs('{{Schema}}')
+  - select insert_p_serverlogs_from_s_serverlogs('{{Schema}}')
+
+- #PI_Report_p_http_requests_new
+  - truncate table p_http_requests
+  - select load_p_http_requests('{{Schema}}')
+
+- #PI_Report_s_http_requests_with_workbooks_new
+  - truncate table s_http_requests_with_workbooks
+  - select load_s_http_requests_with_workbooks ('{{Schema}}')
+
+- #PI_Report_p_background_jobs
+  - truncate table p_background_jobs
+  - select load_p_background_jobs('{{Schema}}' )
+
+- #Report_truncate_s_serverlogs_compressed
+  - truncate table s_serverlogs_compressed
+
+- #Report_load_s_serverlogs_vizql_compressed
+  - select load_s_serverlogs_vizql_compressed('{{Schema}}')
+
+- #Report_load_s_serverlogs_tabproto_compressed
+  - select load_s_serverlogs_tabproto_compressed('{{Schema}}')
+
+- #Report_load_s_serverlogs_dataserver_compressed
+  - select load_s_serverlogs_dataserver_compressed('{{Schema}}')
+
+- #Report_tuncate_s_cpu_usage
+  - truncate table s_cpu_usage
+
+- #Report_load_s_cpu_usage_vizql
+  - select load_s_cpu_usage_vizql('{{Schema}}')
+
+- #Report_load_s_cpu_usage_dataserver
+  - select load_s_cpu_usage_dataserver('{{Schema}}')
+
+- #Report_load_s_cpu_usage_tabproto
+  - select load_s_cpu_usage_tabproto('{{Schema}}')
+
+- #Report_load_s_cpu_usage_rest
+  - select load_s_cpu_usage_rest('{{Schema}}')
+
+- #Report_load_s_cpu_usage_tdeserver
+  - select load_s_cpu_usage_tdeserver('{{Schema}}')
+
+- #Report_load_p_cpu_usage
+  - select manage_partitions('{{Schema}}', 'p_cpu_usage')
+  - select load_from_stage_to_dwh('{{Schema}}', 'p_cpu_usage')
+
+- #PI_Report_p_cpu_usage_report_new
+  - truncate table s_cpu_usage_report
+  - select load_s_cpu_usage_report('{{Schema}}' )
+  - select manage_partitions('{{Schema}}', 'p_cpu_usage_report')
+  - select load_from_stage_to_dwh('{{Schema}}', 'p_cpu_usage_report')
+
+- #Report_load_p_cpu_usage_agg_report
+  - truncate table s_cpu_usage_agg_report
+  - select load_s_cpu_usage_agg_report('{{Schema}}')
+  - select manage_partitions('{{Schema}}', 'p_cpu_usage_agg_report')
+  - select load_from_stage_to_dwh('{{Schema}}', 'p_cpu_usage_agg_report')
+
+- #Report_load_p_interactor_session
+  - truncate table s_interactor_session
+  - select load_s_interactor_session('{{Schema}}')
+  - select manage_partitions('{{Schema}}', 'p_interactor_session')
+  - select load_from_stage_to_dwh('{{Schema}}', 'p_interactor_session')
+  - select handle_utc_midnight_interactor_sess('{{Schema}}')
+
+- #Report_load_p_process_class_agg_report
+  - truncate table s_process_class_agg_report
+  - select load_s_process_class_agg_report('{{Schema}}')
+  - select manage_partitions('{{Schema}}', 'p_process_class_agg_report')
+  - select load_from_stage_to_dwh('{{Schema}}', 'p_process_class_agg_report')
+
+- #Report_load_p_serverlogs_bootstrap_rpt
+  - truncate table s_serverlogs_bootstrap_rpt
+  - select load_s_serverlogs_bootstrap_rpt('{{Schema}}')
+  - select manage_partitions('{{Schema}}', 'p_serverlogs_bootstrap_rpt')
+  - select load_from_stage_to_dwh('{{Schema}}', 'p_serverlogs_bootstrap_rpt')
+
+- #Report_load_p_cpu_usage_bootstrap_rpt
+  - truncate table s_cpu_usage_bootstrap_rpt
+  - select load_s_cpu_usage_bootstrap_rpt('{{Schema}}')
+  - select manage_partitions('{{Schema}}', 'p_cpu_usage_bootstrap_rpt')
+  - select load_from_stage_to_dwh('{{Schema}}', 'p_cpu_usage_bootstrap_rpt')
