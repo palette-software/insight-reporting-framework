@@ -11,18 +11,6 @@ def execute_worflow(workflow, db):
     return [db.transaction(item) for item in workflow]
 
 
-def preprocess_workflow(workflow, config):
-    schema_name = config["Schema"]
-    new_workflow = []
-    for item in workflow:
-        if type(item) is list:
-            new_item = preprocess_workflow(item, config)
-        else:
-            new_item = item.replace("#schema_name#", "'" + schema_name + "'")
-        new_workflow.append(new_item)
-    return new_workflow
-
-
 def main():
     logging.basicConfig(filename='./insight-reporting.log', level=logging.DEBUG)
     logging.info('Start Insight Reporting.')

@@ -30,12 +30,3 @@ Schema: palette
 
     def test_config_has_all_items(self):
         self.assertEqual(6, len(self.config))
-
-    def test_preprocess_one_item(self):
-        wf = reporting.preprocess_workflow(self.workflow, self.config)
-        self.assertIsInstance(wf[0], str)
-
-    def test_preprocess_multiple_item(self):
-        wf = reporting.preprocess_workflow(self.workflow, self.config)
-        self.assertIsInstance(wf[1], list)
-        self.assertEqual(len(wf[1]), 3)
