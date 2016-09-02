@@ -1,4 +1,6 @@
 import logging
+import pprint
+
 import psycopg2
 import yaml
 
@@ -42,12 +44,8 @@ class Database(object):
         self.connection.close()
 
 
-def execute_worflow(workflow, config):
-    db = Database(config)
-
-    for item in workflow:
-        result = db.transaction(item)
-        print(result)
+def execute_worflow(workflow, db):
+    return [db.transaction(item) for item in workflow]
 
 
 def preprocess_workflow(workflow, config):
@@ -72,8 +70,10 @@ def main():
     with open("./workflow.yml") as workflow_file:
         workflow = yaml.load(workflow_file)
 
+    db = Database(config)
     preprocessed_workflow = preprocess_workflow(workflow, config)
-    execute_worflow(preprocessed_workflow, config)
+    result = execute_worflow(preprocessed_workflow, db)
+    pprint.pprint(result, indent=2)
 
     logging.info('End Insight Reporting.')
 
