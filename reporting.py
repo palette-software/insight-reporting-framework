@@ -3,10 +3,10 @@ import pprint
 
 import psycopg2
 import yaml
+from jinja2 import Template
 
 
 class Database(object):
-
     def __init__(self, kwargs):
         self.connection = psycopg2.connect(
             "dbname={Database} user={User} password={Password} host={Host} port={Port}".format(**kwargs))
@@ -68,11 +68,12 @@ def main():
         config = yaml.load(config_file)
 
     with open("./workflow.yml") as workflow_file:
-        workflow = yaml.load(workflow_file)
+        workflow_text = workflow_file.read()
+        preprocessed_workflow = Template(workflow_text).render(**config)
+        workflow = yaml.load(preprocessed_workflow)
 
     db = Database(config)
-    preprocessed_workflow = preprocess_workflow(workflow, config)
-    result = execute_worflow(preprocessed_workflow, db)
+    result = execute_worflow(workflow, db)
     pprint.pprint(result, indent=2)
 
     logging.info('End Insight Reporting.')
