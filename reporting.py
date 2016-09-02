@@ -13,11 +13,27 @@ class Database(object):
     def transaction(self, item):
         cursor = self.connection.cursor()
         cursor.execute("set search_path = " + self.schema_name)
-        cursor.execute("select " + item)
-        result = [record for record in cursor]
+
+        if type(item) is list:
+            result = self._execute_transaction(cursor, item)
+        else:
+            result = self._execute(cursor, item)
+
         self.connection.commit()
         cursor.close()
 
+        return result
+
+    def _execute_transaction(self, cursor, items):
+        result = []
+        for item in items:
+            result.append(self._execute(cursor, item))
+
+        return result
+
+    def _execute(self, cursor, item):
+        cursor.execute("select " + item)
+        result = [record for record in cursor]
         return result
 
     def __del__(self):
