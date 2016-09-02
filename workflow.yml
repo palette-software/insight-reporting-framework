@@ -1,3 +1,6 @@
 - test_py(#schema_name#)
-- test_py(#schema_name#)
+-
+  - test_py(#schema_name#)
+  - test_py(#schema_name#)
+  - test_py(#schema_name#)
 - test_py(#schema_name#)

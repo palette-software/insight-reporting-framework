@@ -50,7 +50,14 @@ def execute_worflow(workflow, config):
 
 def preprocess_workflow(workflow, config):
     schema_name = config["Schema"]
-    return [item.replace("#schema_name#", "'" + schema_name + "'") for item in workflow]
+    new_workflow = []
+    for item in workflow:
+        if type(item) is list:
+            new_item = preprocess_workflow(item, config)
+        else:
+            new_item = item.replace("#schema_name#", "'" + schema_name + "'")
+        new_workflow.append(new_item)
+    return new_workflow
 
 
 def main():
