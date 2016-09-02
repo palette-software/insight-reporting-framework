@@ -3,19 +3,33 @@ import psycopg2
 import yaml
 
 
+class Database(object):
+
+    def __init__(self, kwargs):
+        self.connection = psycopg2.connect(
+            "dbname={Database} user={User} password={Password} host={Host} port={Port}".format(**kwargs))
+        self.schema_name = kwargs['Schema']
+
+    def transaction(self, item):
+        cursor = self.connection.cursor()
+        cursor.execute("set search_path = " + self.schema_name)
+        cursor.execute("select " + item)
+        result = [record for record in cursor]
+        self.connection.commit()
+        cursor.close()
+
+        return result
+
+    def __del__(self):
+        self.connection.close()
+
+
 def execute_worflow(workflow, config):
-    schema_name = config["Schema"]
-    conn = psycopg2.connect(
-        "dbname={Database} user={User} password={Password} host={Host} port={Port}".format(**config))
-    cur = conn.cursor()
-    cur.execute("set search_path = " + schema_name)
-    for i in workflow:
-        cur.execute("select " + i)
-        for record in cur:
-            print(record[0])
-    conn.commit()
-    cur.close()
-    conn.close()
+    db = Database(config)
+
+    for item in workflow:
+        result = db.transaction(item)
+        print(result)
 
 
 def preprocess_workflow(workflow, config):
