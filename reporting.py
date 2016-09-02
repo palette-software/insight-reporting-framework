@@ -12,7 +12,6 @@ class Database(object):
 
     def transaction(self, item):
         cursor = self.connection.cursor()
-        cursor.execute("set search_path = " + self.schema_name)
 
         if type(item) is list:
             result = self._execute_transaction(cursor, item)
@@ -32,9 +31,12 @@ class Database(object):
         return result
 
     def _execute(self, cursor, item):
-        cursor.execute("select " + item)
-        result = [record for record in cursor]
-        return result
+        cursor.execute(item)
+
+        if cursor.rowcount < 1:
+            return []
+
+        return [record for record in cursor]
 
     def __del__(self):
         self.connection.close()

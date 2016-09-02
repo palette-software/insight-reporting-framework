@@ -1,6 +1,7 @@
-- test_py(#schema_name#)
+- set search_path=#schema_name#
+- select test_py(#schema_name#)
 -
-  - test_py(#schema_name#)
-  - test_py(#schema_name#)
-  - test_py(#schema_name#)
-- test_py(#schema_name#)
+  - select test_py(#schema_name#)
+  - select test_py(#schema_name#)
+  - select test_py(#schema_name#)
+- select test_py(#schema_name#)
