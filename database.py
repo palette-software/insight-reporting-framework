@@ -8,15 +8,12 @@ class Database(object):
         self.schema_name = kwargs['Schema']
 
     def transaction(self, item):
-        cursor = self.connection.cursor()
-
-        if type(item) is list:
-            result = self._execute_transaction(cursor, item)
-        else:
-            result = self._execute(cursor, item)
-
-        self.connection.commit()
-        cursor.close()
+        with self.connection as connection:
+            with connection.cursor() as cursor:
+                if type(item) is list:
+                    result = self._execute_transaction(cursor, item)
+                else:
+                    result = self._execute(cursor, item)
 
         return result
 
