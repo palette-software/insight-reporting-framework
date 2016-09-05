@@ -1,32 +1,19 @@
 import unittest
-import yaml
+from unittest.mock import MagicMock
+
 import reporting
+import workflow
 
 
 class ReportingTest(unittest.TestCase):
-    def setUp(self):
-        self.config = yaml.load(\
-"""
-Host: dev-insight.palette-software.net
-Port: 5432
-User: palette_etl_user
-Password: palette123
-Database: palette
-Schema: palette
-""")
 
-        self.workflow = yaml.load(\
-"""
-- test_py(#schema_name#)
--
-  - test_py(#schema_name#)
-  - test_py(#schema_name#)
-  - test_py(#schema_name#)
-- test_py(#schema_name#)
-""")
+    def test_execute_workflow(self):
+        config = reporting.load_config('Config.yml')
+        tasks = workflow.load('workflow.yml', config)
 
-    def tearDown(self):
-        pass
+        db = MagicMock()
 
-    def test_config_has_all_items(self):
-        self.assertEqual(6, len(self.config))
+        reporting.execute_workflow(tasks, db)
+
+        self.assertEqual(2, db.execute.call_count)
+        self.assertEqual(1, db.execute_in_transaction.call_count)
