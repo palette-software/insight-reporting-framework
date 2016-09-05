@@ -4,3 +4,4 @@ User: palette_etl_user
 Password: palette123
 Database: palette
 Schema: palette
+Version: 0.1
