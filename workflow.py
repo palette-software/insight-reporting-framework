@@ -1,6 +1,17 @@
+import yaml
+from jinja2 import Template
+
 TRANSACTION = 'transaction'
 QUERIES = 'queries'
 NAME = 'name'
+
+
+def load(filename, config):
+    with open(filename) as workflow_file:
+        workflow_text = workflow_file.read()
+        preprocessed_workflow = Template(workflow_text).render(**config)
+        workflow = yaml.load(preprocessed_workflow)
+    return workflow
 
 
 def validate(workflow):

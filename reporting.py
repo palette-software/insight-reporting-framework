@@ -1,8 +1,9 @@
 import logging
+
 import yaml
-from jinja2 import Template
 
 from database import Database
+import workflow
 
 FATAL_ERROR = 49
 
@@ -46,18 +47,16 @@ def main():
         logging.info('Start Insight Reporting.')
 
         workflow_filename = config['WorkflowFilename']
-        with open(workflow_filename) as workflow_file:
-            workflow_text = workflow_file.read()
-            preprocessed_workflow = Template(workflow_text).render(**config)
-            workflow = yaml.load(preprocessed_workflow)
+        workflow_doc = workflow.load(workflow_filename, config)
 
         db = Database(config)
         logging.debug('Executing "{}" workflow'.format(workflow_filename))
-        execute_workflow(workflow, db)
+        execute_workflow(workflow_doc, db)
 
         logging.info('End Insight Reporting.')
     except Exception as exception:
         logging.log(FATAL_ERROR, 'Unhandled exception occurred: {}'.format(exception))
+
 
 if __name__ == '__main__':
     main()
