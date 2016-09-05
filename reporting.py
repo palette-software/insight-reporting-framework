@@ -4,13 +4,15 @@ from jinja2 import Template
 
 from database import Database
 
+FATAL_ERROR = 49
+
 
 def execute_worflow(workflow, db):
     return [db.transaction(item) for item in workflow]
 
 
 def setup_logging(filename):
-    FORMAT = '%(asctime)-15s - %(levelname)s - %(module)s - %(message)s'
+    FORMAT = '%(asctime)-15s - %(levelname)-5s - %(module)-10s - %(message)s'
     logging.basicConfig(filename=filename, level=logging.DEBUG, format=FORMAT)
 
     console = logging.StreamHandler()
@@ -19,27 +21,31 @@ def setup_logging(filename):
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
 
+    logging.addLevelName(FATAL_ERROR, 'FATAL')
+
 
 def main():
-    with open("./Config.yml") as config_file:
-        config = yaml.load(config_file)
+    try:
+        with open("./Config.yml") as config_file:
+            config = yaml.load(config_file)
 
-    setup_logging(config['Logfilename'])
+        setup_logging(config['Logfilename'])
 
-    logging.info('Start Insight Reporting.')
+        logging.info('Start Insight Reporting.')
 
-    workflow_filename = config['WorkflowFilename']
-    with open(workflow_filename) as workflow_file:
-        workflow_text = workflow_file.read()
-        preprocessed_workflow = Template(workflow_text).render(**config)
-        workflow = yaml.load(preprocessed_workflow)
+        workflow_filename = config['WorkflowFilename']
+        with open(workflow_filename) as workflow_file:
+            workflow_text = workflow_file.read()
+            preprocessed_workflow = Template(workflow_text).render(**config)
+            workflow = yaml.load(preprocessed_workflow)
 
-    db = Database(config)
-    logging.debug('Executing "{}" workflow'.format(workflow_filename))
-    execute_worflow(workflow, db)
+        db = Database(config)
+        logging.debug('Executing "{}" workflow'.format(workflow_filename))
+        execute_worflow(workflow, db)
 
-    logging.info('End Insight Reporting.')
-
+        logging.info('End Insight Reporting.')
+    except Exception as exception:
+        logging.log(FATAL_ERROR, 'Unhandled exception occurred: {}'.format(exception))
 
 if __name__ == '__main__':
     main()
