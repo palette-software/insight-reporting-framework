@@ -4,13 +4,13 @@ import psycopg2
 
 class Database(object):
     def __init__(self, kwargs):
-        logging.debug("Start database connection")
+        logging.debug("Start creating database connection")
         self.connection = psycopg2.connect(
             "dbname={Database} user={User} password={Password} host={Host} port={Port}".format(**kwargs))
-        logging.debug("End database connection")
+        logging.debug("End creating database connection")
         self.schema_name = kwargs['Schema']
 
-    def transaction(self, item):
+    def execute_in_transaction(self, item):
         with self.connection as connection:
             with connection.cursor() as cursor:
                 if type(item) is list:
@@ -18,6 +18,10 @@ class Database(object):
                 else:
                     result = self._execute(cursor, item)
         return result
+
+    def execute(self, items):
+        for item in items:
+            self.execute_in_transaction(item)
 
     def _execute_transaction(self, cursor, items):
         result = []
