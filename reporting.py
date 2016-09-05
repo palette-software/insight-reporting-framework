@@ -7,7 +7,7 @@ from database import Database
 FATAL_ERROR = 49
 
 
-def execute_worflow(workflow, db):
+def execute_workflow(workflow, db):
     for item in workflow:
         logging.info('Start "{}"'.format(item['name']))
         if item.get('transaction', False):
@@ -47,7 +47,7 @@ def main():
 
         db = Database(config)
         logging.debug('Executing "{}" workflow'.format(workflow_filename))
-        execute_worflow(workflow, db)
+        execute_workflow(workflow, db)
 
         logging.info('End Insight Reporting.')
     except Exception as exception:
