@@ -12,7 +12,8 @@ def execute_worflow(workflow, db):
 
 
 def main():
-    logging.basicConfig(filename='./insight-reporting.log', level=logging.DEBUG)
+    FORMAT = '%(asctime)-15s - %(levelname)s - %(module)s - %(message)s'
+    logging.basicConfig(filename='./insight-reporting.log', level=logging.DEBUG, format=FORMAT)
     logging.info('Start Insight Reporting.')
 
     with open("./Config.yml") as config_file:
