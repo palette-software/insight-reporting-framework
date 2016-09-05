@@ -5,4 +5,5 @@ User: palette_etl_user
 Password: palette123
 Database: palette
 Schema: palette
+WorkflowFilename: workflow.yml
 Logfilename: insight-reporting.log

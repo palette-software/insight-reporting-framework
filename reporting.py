@@ -28,12 +28,14 @@ def main():
 
     logging.info('Start Insight Reporting.')
 
-    with open("./workflow.yml") as workflow_file:
+    workflow_filename = config['WorkflowFilename']
+    with open(workflow_filename) as workflow_file:
         workflow_text = workflow_file.read()
         preprocessed_workflow = Template(workflow_text).render(**config)
         workflow = yaml.load(preprocessed_workflow)
 
     db = Database(config)
+    logging.debug('Executing "{}" workflow'.format(workflow_filename))
     execute_worflow(workflow, db)
 
     logging.info('End Insight Reporting.')
