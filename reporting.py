@@ -8,7 +8,14 @@ FATAL_ERROR = 49
 
 
 def execute_worflow(workflow, db):
-    return [db.transaction(item) for item in workflow]
+    for item in workflow:
+        logging.info('Start "{}"'.format(item['name']))
+        if item.get('transaction', False):
+            db.transaction(item['queries'])
+        else:
+            for i in item['queries']:
+                db.transaction(i)
+        logging.info('End "{}"'.format(item['name']))
 
 
 def setup_logging(filename):

@@ -1,9 +1,26 @@
 -
-  name:  Setting search_path to {{Schema}}
-  query: set search_path={{Schema}}
+  name: Set environment
+  queries:
+    -
+      name:  Setting search_path to {{Schema}}
+      query: set search_path={{Schema}}
 -
-  name:  Run test
-  query: select test_py('{{Schema}}')
+  name: Run 2 tests
+  transaction: True
+  queries:
+    -
+      name:  In transaction TRUNCATE
+      query: select test_py_trunc('{{Schema}}')
+    -
+      name:  In transaction SELECT
+      query: select test_py_select('{{Schema}}')
 -
-  name:  Another test run
-  query: select test_py('{{Schema}}')
+  name: Run 2 tests again
+  transaction: False
+  queries:
+    -
+      name:  Not in transaction TRUNCATE
+      query: select test_py_trunc('{{Schema}}')
+    -
+      name:  Not in transaction SELECT
+      query: select test_py_select('{{Schema}}')
