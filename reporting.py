@@ -17,6 +17,12 @@ def execute_workflow(workflow, db):
         logging.info('End "{}"'.format(item['name']))
 
 
+def load_config(filename):
+    with open(filename) as config_file:
+        config = yaml.load(config_file)
+    return config
+
+
 def setup_logging(filename):
     FORMAT = '%(asctime)-15s - %(levelname)-5s - %(module)-10s - %(message)s'
     logging.basicConfig(filename=filename, level=logging.DEBUG, format=FORMAT)
@@ -32,8 +38,8 @@ def setup_logging(filename):
 
 def main():
     try:
-        with open("./Config.yml") as config_file:
-            config = yaml.load(config_file)
+        config_filename = "./Config.yml"
+        config = load_config(config_filename)
 
         setup_logging(config['Logfilename'])
 
