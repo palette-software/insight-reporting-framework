@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest import mock
 
 import reporting
 import workflow
@@ -11,9 +11,9 @@ class ReportingTest(unittest.TestCase):
         config = reporting.load_config('Config.yml')
         tasks = workflow.load_from_file('workflow.yml', config)
 
-        db = MagicMock()
+        db = mock.MagicMock()
 
         reporting.execute_workflow(tasks, db)
 
-        self.assertEqual(2, db.execute.call_count)
-        self.assertEqual(1, db.execute_in_transaction.call_count)
+        db.execute.assert_has_calls([mock.call(tasks[0]['queries']), mock.call(tasks[2]['queries'])])
+        db.execute_in_transaction.assert_called_once_with(tasks[1]['queries'])
