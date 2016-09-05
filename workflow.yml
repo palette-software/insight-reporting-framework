@@ -1,7 +1,9 @@
-- set search_path={{Schema}}
-- select * from p_interactor_session limit 10
 -
-  - select test_py('{{Schema}}')
-  - select test_py('{{Schema}}')
-  - select test_py('{{Schema}}')
-- select test_py('{{Schema}}')
+  name:  Setting search_path to {{Schema}}
+  query: set search_path={{Schema}}
+-
+  name:  Run test
+  query: select test_py('{{Schema}}')
+-
+  name:  Another test run
+  query: select test_py('{{Schema}}')
