@@ -6,7 +6,7 @@ QUERIES = 'queries'
 NAME = 'name'
 
 
-def load(filename, config):
+def load_from_file(filename, config):
     with open(filename) as workflow_file:
         workflow_text = workflow_file.read()
         preprocessed_workflow = Template(workflow_text).render(**config)

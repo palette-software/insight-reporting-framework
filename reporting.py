@@ -47,7 +47,7 @@ def main():
         logging.info('Start Insight Reporting.')
 
         workflow_filename = config['WorkflowFilename']
-        workflow_doc = workflow.load(workflow_filename, config)
+        workflow_doc = workflow.load_from_file(workflow_filename, config)
 
         db = Database(config)
         logging.debug('Executing "{}" workflow'.format(workflow_filename))
