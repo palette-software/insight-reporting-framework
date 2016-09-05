@@ -1,6 +1,4 @@
 import logging
-import pprint
-
 import yaml
 from jinja2 import Template
 
@@ -11,13 +9,24 @@ def execute_worflow(workflow, db):
     return [db.transaction(item) for item in workflow]
 
 
-def main():
+def setup_logging(filename):
     FORMAT = '%(asctime)-15s - %(levelname)s - %(module)s - %(message)s'
-    logging.basicConfig(filename='./insight-reporting.log', level=logging.DEBUG, format=FORMAT)
-    logging.info('Start Insight Reporting.')
+    logging.basicConfig(filename=filename, level=logging.DEBUG, format=FORMAT)
 
+    console = logging.StreamHandler()
+    console.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(FORMAT)
+    console.setFormatter(formatter)
+    logging.getLogger('').addHandler(console)
+
+
+def main():
     with open("./Config.yml") as config_file:
         config = yaml.load(config_file)
+
+    setup_logging(config['Logfilename'])
+
+    logging.info('Start Insight Reporting.')
 
     with open("./workflow.yml") as workflow_file:
         workflow_text = workflow_file.read()
@@ -25,8 +34,7 @@ def main():
         workflow = yaml.load(preprocessed_workflow)
 
     db = Database(config)
-    result = execute_worflow(workflow, db)
-    pprint.pprint(result, indent=2)
+    execute_worflow(workflow, db)
 
     logging.info('End Insight Reporting.')
 

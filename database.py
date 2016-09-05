@@ -27,15 +27,15 @@ class Database(object):
         return result
 
     def _execute(self, cursor, item):
-        logging.debug('Start "{}"'.format(item['name']))
+        logging.info('Start "{}"'.format(item['name']))
         cursor.execute(item['query'])
 
         if cursor.rowcount < 1:
-            logging.debug('End "{}"'.format(item['name']))
+            logging.info('End "{}"'.format(item['name']))
             return []
 
         records = cursor.fetchall()
-        logging.debug('End "{}" return with: {}'.format(item['name'], records[0][0]))
+        logging.info('End "{}" return with: {}'.format(item['name'], records[0][0]))
         return records
 
     def __del__(self):
