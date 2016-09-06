@@ -205,7 +205,7 @@
       name: p_serverlogs_bootstrap_rpt - load_from_stage_to_dwh
       query: select load_from_stage_to_dwh('{{Schema}}', 'p_serverlogs_bootstrap_rpt')
 -
-  name: Load_p_cpu_usage_bootstrap_rpt
+  name: Load p_cpu_usage_bootstrap_rpt
   transaction: False
   queries:
     -
