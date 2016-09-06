@@ -24,15 +24,16 @@ def load_config(filename):
     return config
 
 
-def setup_logging(filename):
+def setup_logging(filename, console_enabled):
     FORMAT = '%(asctime)-15s - %(levelname)-5s - %(module)-10s - %(message)s'
     logging.basicConfig(filename=filename, level=logging.DEBUG, format=FORMAT)
-
-    console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(FORMAT)
-    console.setFormatter(formatter)
-    logging.getLogger('').addHandler(console)
+    
+    if console_enabled:        
+        console = logging.StreamHandler()
+        console.setLevel(logging.DEBUG)
+        formatter = logging.Formatter(FORMAT)
+        console.setFormatter(formatter)
+        logging.getLogger('').addHandler(console)
 
     logging.addLevelName(FATAL_ERROR, 'FATAL')
 
@@ -42,7 +43,7 @@ def main():
         config_filename = "./Config.yml"
         config = load_config(config_filename)
 
-        setup_logging(config['Logfilename'])
+        setup_logging(config['Logfilename'], config['ConsoleLog'])
 
         logging.info('Start Insight Reporting.')
 
