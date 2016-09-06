@@ -1,5 +1,5 @@
 Version: 2.0.0
-Host: dev-insight.palette-software.net
+Host: localhost
 Port: 5432
 User: palette_etl_user
 Password: palette123
