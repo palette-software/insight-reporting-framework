@@ -14,23 +14,23 @@ class Database(object):
         with self.connection as connection:
             with connection.cursor() as cursor:
                 if type(item) is list:
-                    result = self._execute_transaction(cursor, item)
+                    result = self.__execute_transaction(cursor, item)
                 else:
-                    result = self._execute(cursor, item)
+                    result = self.__execute(cursor, item)
         return result
 
     def execute(self, items):
         for item in items:
             self.execute_in_transaction(item)
 
-    def _execute_transaction(self, cursor, items):
+    def __execute_transaction(self, cursor, items):
         result = []
         for item in items:
-            result.append(self._execute(cursor, item))
+            result.append(self.__execute(cursor, item))
 
         return result
 
-    def _execute(self, cursor, item):
+    def __execute(self, cursor, item):
         logging.info('Start "{}"'.format(item['name']))
         cursor.execute(item['query'])
 
