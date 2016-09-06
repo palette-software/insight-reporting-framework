@@ -53,11 +53,11 @@
       query: select insert_p_serverlogs_from_s_serverlogs('{{Schema}}')
 -
   name: Load p_http_requests
-  transaction: False
+  transaction: True
   queries:
     -
-      name: truncate table p_http_requests
-      query: truncate table p_http_requests
+      name: delete from p_http_requests
+      query: delete from p_http_requests
     -
       name: load_p_http_requests
       query: select load_p_http_requests('{{Schema}}')
@@ -73,11 +73,11 @@
       query: select load_s_http_requests_with_workbooks('{{Schema}}')
 -
   name: Load p_background_jobs
-  transaction: False
+  transaction: True
   queries:
     -
-      name: truncate table p_background_jobs
-      query: truncate table p_background_jobs
+      name: delete from p_background_jobs
+      query: delete from p_background_jobs
     -
       name: select load_p_background_jobs
       query: select load_p_background_jobs('{{Schema}}')
