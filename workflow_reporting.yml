@@ -11,7 +11,7 @@
       name: Log datamodel version
       query: select first_value(version_number) over (order by id desc) as model_version from db_version_meta v limit 1
 -
-  name: PI_Report_p_threadinfo_new
+  name: Load p_threadinfo
   transaction: False
   queries:
     -
@@ -21,51 +21,27 @@
       name: load_p_threadinfo
       query: select load_p_threadinfo('{{Schema}}', 'DELTA')
 -
-  name: Report_truncate_s_serverlogs
+  name: Load p_serverlogs
   transaction: False
   queries:
     -
       name: truncate table s_serverlogs
       query: truncate table s_serverlogs
--
-  name: Report_load_s_serverlogs_rest
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_rest
       query: select load_s_serverlogs_rest('{{Schema}}')
--
-  name: Report_load_s_serverlogs_vizql
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_vizql
       query: select load_s_serverlogs_vizql('{{Schema}}')
--
-  name: Report_load_s_serverlogs_dataserver
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_dataserver
       query: select load_s_serverlogs_dataserver('{{Schema}}')
--
-  name: Report_load_s_serverlogs_tabproto
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_tabproto
       query: select load_s_serverlogs_tabproto('{{Schema}}')
--
-  name: Report_load_s_serverlogs_tdeserver
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_tdeserver
       query: select load_s_serverlogs_tdeserver('{{Schema}}')
--
-  name: Report_load_p_serverlogs
-  transaction: False
-  queries:
     -
       name: p_serverlogs - manage_partitions
       query: select manage_partitions('{{Schema}}', 'p_serverlogs')
@@ -76,7 +52,7 @@
       name: insert_p_serverlogs_from_s_serverlogs
       query: select insert_p_serverlogs_from_s_serverlogs('{{Schema}}')
 -
-  name: PI_Report_p_http_requests_new
+  name: Load p_http_requests
   transaction: False
   queries:
     -
@@ -86,7 +62,7 @@
       name: load_p_http_requests
       query: select load_p_http_requests('{{Schema}}')
 -
-  name: PI_Report_s_http_requests_with_workbooks_new
+  name: Load s_http_requests_with_workbooks
   transaction: False
   queries:
     -
@@ -96,7 +72,7 @@
       name: load_s_http_requests_with_workbooks
       query: select load_s_http_requests_with_workbooks('{{Schema}}')
 -
-  name: PI_Report_p_background_jobs
+  name: Load p_background_jobs
   transaction: False
   queries:
     -
@@ -106,79 +82,39 @@
       name: select load_p_background_jobs
       query: select load_p_background_jobs('{{Schema}}')
 -
-  name: Report_truncate_s_serverlogs_compressed
+  name: Load p_cpu_usage
   transaction: False
   queries:
     -
       name: truncate table s_serverlogs_compressed
       query: truncate table s_serverlogs_compressed
--
-  name: Report_load_s_serverlogs_vizql_compressed
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_vizql_compressed
       query: select load_s_serverlogs_vizql_compressed('{{Schema}}')
--
-  name: Report_load_s_serverlogs_tabproto_compressed
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_tabproto_compressed
       query: select load_s_serverlogs_tabproto_compressed('{{Schema}}')
--
-  name: Report_load_s_serverlogs_dataserver_compressed
-  transaction: False
-  queries:
     -
       name: load_s_serverlogs_dataserver_compressed
       query: select load_s_serverlogs_dataserver_compressed('{{Schema}}')
--
-  name: Report_tuncate_s_cpu_usage
-  transaction: False
-  queries:
     -
       name: truncate table s_cpu_usage
       query: truncate table s_cpu_usage
--
-  name: Report_load_s_cpu_usage_vizql
-  transaction: False
-  queries:
     -
       name: load_s_cpu_usage_vizql
       query: select load_s_cpu_usage_vizql('{{Schema}}')
--
-  name: Report_load_s_cpu_usage_dataserver
-  transaction: False
-  queries:
     -
       name: load_s_cpu_usage_dataserver
       query: select load_s_cpu_usage_dataserver('{{Schema}}')
--
-  name: Report_load_s_cpu_usage_tabproto
-  transaction: False
-  queries:
     -
       name: load_s_cpu_usage_tabproto
       query: select load_s_cpu_usage_tabproto('{{Schema}}')
--
-  name: Report_load_s_cpu_usage_rest
-  transaction: False
-  queries:
     -
       name: load_s_cpu_usage_rest
       query: select load_s_cpu_usage_rest('{{Schema}}')
--
-  name: Report_load_s_cpu_usage_tdeserver
-  transaction: False
-  queries:
     -
       name: load_s_cpu_usage_tdeserver
       query: select load_s_cpu_usage_tdeserver('{{Schema}}')
--
-  name: Report_load_p_cpu_usage
-  transaction: False
-  queries:
     -
       name: p_cpu_usage - manage_partitions
       query: select manage_partitions('{{Schema}}', 'p_cpu_usage')
@@ -186,7 +122,7 @@
       name: p_cpu_usage - load_from_stage_to_dwh
       query: select load_from_stage_to_dwh('{{Schema}}', 'p_cpu_usage')
 -
-  name: PI_Report_p_cpu_usage_report_new
+  name: Load p_cpu_usage_report
   transaction: False
   queries:
     -
@@ -202,7 +138,7 @@
       name: p_cpu_usage_report - load_from_stage_to_dwh
       query: select load_from_stage_to_dwh('{{Schema}}', 'p_cpu_usage_report')
 -
-  name: Report_load_p_cpu_usage_agg_report
+  name: Load p_cpu_usage_agg_report
   transaction: False
   queries:
     -
@@ -218,7 +154,7 @@
       name: p_cpu_usage_agg_report - load_from_stage_to_dwh
       query: select load_from_stage_to_dwh('{{Schema}}', 'p_cpu_usage_agg_report')
 -
-  name: Report_load_p_interactor_session
+  name: Load p_interactor_session
   transaction: False
   queries:
     -
@@ -237,7 +173,7 @@
       name: handle_utc_midnight_interactor_sess
       query: select handle_utc_midnight_interactor_sess('{{Schema}}')
 -
-  name: Report_load_p_process_class_agg_report
+  name: Load p_process_class_agg_report
   transaction: False
   queries:
     -
@@ -253,7 +189,7 @@
       name: p_process_class_agg_report - load_from_stage_to_dwh
       query: select load_from_stage_to_dwh('{{Schema}}', 'p_process_class_agg_report')
 -
-  name: Report_load_p_serverlogs_bootstrap_rpt
+  name: Load p_serverlogs_bootstrap_rpt
   transaction: False
   queries:
     -
@@ -269,7 +205,7 @@
       name: p_serverlogs_bootstrap_rpt - load_from_stage_to_dwh
       query: select load_from_stage_to_dwh('{{Schema}}', 'p_serverlogs_bootstrap_rpt')
 -
-  name: Report_load_p_cpu_usage_bootstrap_rpt
+  name: Load_p_cpu_usage_bootstrap_rpt
   transaction: False
   queries:
     -
