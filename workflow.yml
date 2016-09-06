@@ -9,6 +9,9 @@
   transaction: True
   queries:
     -
+      name:  In transaction DELETE
+      query: delete from palette.kgz_test_py_tr
+    -
       name:  In transaction TRUNCATE
       query: select test_py_trunc('{{Schema}}')
     -

@@ -34,13 +34,16 @@ class Database(object):
         logging.info('Start "{}"'.format(item['name']))
         cursor.execute(item['query'])
 
-        if cursor.rowcount < 1:
+        if self.__has_no_records(cursor):
             logging.info('End "{}"'.format(item['name']))
             return []
 
         records = cursor.fetchall()
         logging.info('End "{}" return with: {}'.format(item['name'], records[0][0]))
         return records
+
+    def __has_no_records(self, cursor):
+        return cursor.rowcount < 1 or cursor.statusmessage.startswith('DELETE')
 
     def __del__(self):
         self.connection.close()
