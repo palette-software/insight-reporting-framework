@@ -39,6 +39,7 @@ before_deploy:
   - cp -v ../*.py opt/insight-reporting-framework
   - cp -v ../*.txt opt/insight-reporting-framework
   - cp -v ../*.yml opt/insight-reporting-framework
+  - cp -v ../*.sh opt/insight-reporting-framework
   - cp -v ../reporting-framework-config.yml etc/palette-insight-server
   - echo "BUILDING VERSION:$VERSION"
 
