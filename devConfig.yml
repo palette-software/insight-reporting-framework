@@ -1,0 +1,10 @@
+Version: 2.0.0
+Host: dev-insight.palette-software.net
+Port: 5432
+User: palette_etl_user
+Password: palette123
+Database: palette
+Schema: palette
+WorkflowFilename: ./workflow.yml
+Logfilename: ./reporting.log
+ConsoleLog: True

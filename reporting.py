@@ -1,4 +1,5 @@
 import logging
+import logging.handlers
 import yaml
 from database import Database
 import workflow
@@ -24,9 +25,14 @@ def load_config(filename):
 
 
 def setup_logging(filename, console_enabled):
-    FORMAT = '%(asctime)-15s - %(levelname)-5s - %(module)-10s - %(message)s'
-    logging.basicConfig(filename=filename, level=logging.DEBUG, format=FORMAT)
-    
+    FORMAT = '%(asctime)-15s - %(levelname)-5s - %(module)-10s - %(message)s'       
+    #file_log_handler = logging.RotatingFileHandler(filename=filename, maxBytes=10485760, backupCount=5)
+    #file_log_handler = logging.handlers.RotatingFileHandler(filename=filename, maxBytes=100, backupCount=5)
+    #file_log_handler.setLevel(logging.DEBUG)
+    #formatter = logging.Formatter(FORMAT)
+    #file_log_handler.setFormatter(formatter)
+    #logging.getLogger('').addHandler(file_log_handler)              
+
     if console_enabled:        
         console = logging.StreamHandler()
         console.setLevel(logging.DEBUG)

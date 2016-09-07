@@ -37,8 +37,7 @@ before_deploy:
 
   # Copy the package contents
   - cp -v ../*.py opt/insight-reporting-framework
-  - cp -v ../*.txt opt/insight-reporting-framework
-  - cp -v ../*.yml opt/insight-reporting-framework
+  - cp -v ../requirements.txt opt/insight-reporting-framework
   - cp -v ../*.sh opt/insight-reporting-framework
   - cp -v ../reporting-framework-config.yml etc/palette-insight-server
   
