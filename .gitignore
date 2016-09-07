@@ -1,5 +1,6 @@
 # Log file
-insight-reporting.log
+*.log
+*.log.*
 
 # IDEA project file
 .idea
