@@ -6,4 +6,4 @@ set -e
 LOCKFILE=/tmp/PI_Reporting.flock
 
 flock -n ${LOCKFILE} \
-  python3 /opt/insight-reporting-framework /etc/palette-insight-server/reporting-framework-config.yml
+  python3 /opt/insight-reporting-framework/reporting.py /etc/palette-insight-server/reporting-framework-config.yml
