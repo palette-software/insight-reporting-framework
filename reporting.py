@@ -1,9 +1,8 @@
 import logging
-
 import yaml
-
 from database import Database
 import workflow
+import sys
 
 FATAL_ERROR = 49
 
@@ -40,7 +39,7 @@ def setup_logging(filename, console_enabled):
 
 def main():
     try:
-        config_filename = "./Config.yml"
+        config_filename = sys.argv[1]
         config = load_config(config_filename)
 
         setup_logging(config['Logfilename'], config['ConsoleLog'])

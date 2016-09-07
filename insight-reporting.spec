@@ -83,6 +83,7 @@ pip3 install -r /opt/insight-reporting/requirements.txt
 # with "/", then make sure paths with spaces are quoted. 
 # /usr/local/bin/palette-insight-server
 /opt/insight-reporting
+/etc/palette-insight-server
 %dir /var/log/insight-reporting
 
 # config files can be defined according to this
