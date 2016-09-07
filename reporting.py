@@ -25,21 +25,19 @@ def load_config(filename):
 
 
 def setup_logging(filename, console_enabled):
-    FORMAT = '%(asctime)-15s - %(levelname)-5s - %(module)-10s - %(message)s'       
-    #file_log_handler = logging.RotatingFileHandler(filename=filename, maxBytes=10485760, backupCount=5)
-    #file_log_handler = logging.handlers.RotatingFileHandler(filename=filename, maxBytes=100, backupCount=5)
-    #file_log_handler.setLevel(logging.DEBUG)
-    #formatter = logging.Formatter(FORMAT)
-    #file_log_handler.setFormatter(formatter)
-    #logging.getLogger('').addHandler(file_log_handler)              
+    FORMAT = '%(asctime)-15s - %(levelname)-5s - %(module)-10s - %(message)s'
+
+    log_handlers = []
+
+    file_log_handler = logging.handlers.RotatingFileHandler(filename=filename, maxBytes=10485760, backupCount=5)
+
+    log_handlers.append(file_log_handler)
 
     if console_enabled:        
         console = logging.StreamHandler()
-        console.setLevel(logging.DEBUG)
-        formatter = logging.Formatter(FORMAT)
-        console.setFormatter(formatter)
-        logging.getLogger('').addHandler(console)
+        log_handlers.append(console)
 
+    logging.basicConfig(level=logging.DEBUG, format=FORMAT, handlers=log_handlers)
     logging.addLevelName(FATAL_ERROR, 'FATAL')
 
 
