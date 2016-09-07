@@ -38,6 +38,8 @@ def setup_logging(filename, console_enabled):
         log_handlers.append(console)
 
     logging.basicConfig(level=logging.DEBUG, format=FORMAT, handlers=log_handlers)
+
+    # We need a custom level to have 'FATAL' appear in log files (instead of CRITICAL)
     logging.addLevelName(FATAL_ERROR, 'FATAL')
 
 
