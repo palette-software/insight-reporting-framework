@@ -33,13 +33,13 @@ before_deploy:
   # Create directories
   - mkdir -p opt/insight-reporting
   - mkdir -p var/log/insight-reporting
-  - mkdir -p _root/etc/palette-insight-server
+  - mkdir -p etc/palette-insight-server
 
   # Copy the package contents
   - cp -v ../*.py opt/insight-reporting
   - cp -v ../*.txt opt/insight-reporting
   - cp -v ../*.yml opt/insight-reporting
-  - cp -v ../reporting-framework-config.yml _root/etc/palette-insight-server
+  - cp -v ../reporting-framework-config.yml etc/palette-insight-server
   - echo "BUILDING VERSION:$VERSION"
 
   # build the rpm
