@@ -71,7 +71,7 @@ Palette Insight Reporting Framework
 # noop
 
 %post
-pip3 install -r /opt/insight-reporting/requirements.txt
+pip3 install -r /opt/insight-reporting-framework/requirements.txt
 
 %clean
 # noop
@@ -82,9 +82,9 @@ pip3 install -r /opt/insight-reporting/requirements.txt
 # Reject config files already listed or parent directories, then prefix files
 # with "/", then make sure paths with spaces are quoted. 
 # /usr/local/bin/palette-insight-server
-/opt/insight-reporting
+/opt/insight-reporting-framework
 /etc/palette-insight-server
-%dir /var/log/insight-reporting
+%dir /var/log/insight-reporting-framework
 
 # config files can be defined according to this
 # http://www-uxsup.csx.cam.ac.uk/~jw35/docs/rpm_config.html

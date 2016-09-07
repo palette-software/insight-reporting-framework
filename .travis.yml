@@ -31,19 +31,19 @@ before_deploy:
   - mkdir -p _build
 
   # Create directories
-  - mkdir -p opt/insight-reporting
-  - mkdir -p var/log/insight-reporting
+  - mkdir -p opt/insight-reporting-framework
+  - mkdir -p var/log/insight-reporting-framework
   - mkdir -p etc/palette-insight-server
 
   # Copy the package contents
-  - cp -v ../*.py opt/insight-reporting
-  - cp -v ../*.txt opt/insight-reporting
-  - cp -v ../*.yml opt/insight-reporting
+  - cp -v ../*.py opt/insight-reporting-framework
+  - cp -v ../*.txt opt/insight-reporting-framework
+  - cp -v ../*.yml opt/insight-reporting-framework
   - cp -v ../reporting-framework-config.yml etc/palette-insight-server
   - echo "BUILDING VERSION:$VERSION"
 
   # build the rpm
-  - rpmbuild -bb --buildroot $(pwd) --define "version $VERSION" --define "buildrelease $TRAVIS_BUILD_NUMBER" --define "_rpmdir $(pwd)/_build" ../insight-reporting.spec
+  - rpmbuild -bb --buildroot $(pwd) --define "version $VERSION" --define "buildrelease $TRAVIS_BUILD_NUMBER" --define "_rpmdir $(pwd)/_build" ../insight-reporting-framework.spec
   - popd
 
 deploy:

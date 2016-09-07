@@ -5,6 +5,6 @@ User: palette_etl_user
 Password: palette123
 Database: palette
 Schema: palette
-WorkflowFilename: workflow_reporting.yml
-Logfilename: insight-reporting.log
+WorkflowFilename: /etc/palette-insight-server/workflow_reporting.yml
+Logfilename: /var/log/insight-reporting-framework/reporting.log
 ConsoleLog: False
