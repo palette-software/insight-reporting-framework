@@ -41,8 +41,6 @@ before_deploy:
   - cp -v ../*.sh opt/insight-reporting-framework
   - cp -v ../reporting-framework-config.yml etc/palette-insight-server
   
-  - chmod +x opt/insight-reporting-framework/*.sh
-  
   - echo "BUILDING VERSION:$VERSION"
 
   # build the rpm
