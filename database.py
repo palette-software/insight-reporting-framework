@@ -14,7 +14,7 @@ class Database(object):
         with self.connection as connection:
             with connection.cursor() as cursor:
                 if type(item) is list:
-                    result = self.__execute_transaction(cursor, item)
+                    result = self.__execute_all(cursor, item)
                 else:
                     result = self.__execute(cursor, item)
         return result
@@ -23,7 +23,7 @@ class Database(object):
         for item in items:
             self.execute_in_transaction(item)
 
-    def __execute_transaction(self, cursor, items):
+    def __execute_all(self, cursor, items):
         result = []
         for item in items:
             result.append(self.__execute(cursor, item))
