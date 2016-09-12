@@ -5,6 +5,6 @@ User: palette_etl_user
 Password: palette123
 Database: palette
 Schema: palette
-WorkflowFilename: ./workflow.yml
+WorkflowFilename: ./devWorkflow.yml
 Logfilename: ./reporting.log
 ConsoleLog: True

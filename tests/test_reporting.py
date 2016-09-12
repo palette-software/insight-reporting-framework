@@ -9,7 +9,7 @@ class ReportingTest(unittest.TestCase):
 
     def test_execute_workflow(self):
         config = reporting.load_config('Config.yml')
-        tasks = workflow.load_from_file('workflow.yml', config)
+        tasks = workflow.load_from_file('devWorkflow.yml', config)
 
         db = mock.MagicMock()
 
