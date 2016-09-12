@@ -5,6 +5,11 @@ from database import Database
 import workflow
 import sys
 
+
+# https://docs.python.org/3.5/library/logging.html#logging.addLevelName
+# https://docs.python.org/3.5/library/logging.html#logging-levels
+# Arbitrary chosen value for custom log level.
+# We need a custom level to have 'FATAL' appear in log files (instead of CRITICAL)
 FATAL_ERROR = 49
 
 
@@ -39,7 +44,6 @@ def setup_logging(filename, console_enabled):
 
     logging.basicConfig(level=logging.DEBUG, format=FORMAT, handlers=log_handlers)
 
-    # We need a custom level to have 'FATAL' appear in log files (instead of CRITICAL)
     logging.addLevelName(FATAL_ERROR, 'FATAL')
 
 
