@@ -21,9 +21,6 @@ before_script:
   - echo "==== Setting ${BUILD_TAG} as version ===="
 
 script:
-  - echo "Nothing to do. It just works :)"
-
-before_deploy:
   - export VERSION_NUMBER="$(sed -n 's/Version. \([0-9]*\.[0-9]*\.[0-9]*$\)/\1/p' < reporting-framework-config.yml)"
   - export VERSION=v$VERSION_NUMBER.$TRAVIS_BUILD_NUMBER
   - mkdir -p rpm-build
@@ -40,7 +37,7 @@ before_deploy:
   - cp -v ../requirements.txt opt/insight-reporting-framework
   - cp -v ../*.sh opt/insight-reporting-framework
   - cp -v ../reporting-framework-config.yml etc/palette-insight-server
-  
+
   - echo "BUILDING VERSION:$VERSION"
 
   # build the rpm
