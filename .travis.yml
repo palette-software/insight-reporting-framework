@@ -50,7 +50,7 @@ deploy:
   script: "./deploy.sh"
   skip_cleanup: true
   on:
-    branch: python
+    branch: master
 
 notifications:
   email: false
