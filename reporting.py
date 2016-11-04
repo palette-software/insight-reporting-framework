@@ -4,7 +4,8 @@ import yaml
 from database import Database
 import workflow
 import sys
-
+import datetime
+from jinja2 import Template
 
 # https://docs.python.org/3.5/library/logging.html#logging.addLevelName
 # https://docs.python.org/3.5/library/logging.html#logging-levels
@@ -12,6 +13,8 @@ import sys
 # We need a custom level to have 'FATAL' appear in log files (instead of CRITICAL)
 FATAL_ERROR = 49
 
+class PaletteReportingNotAfter2AM(Exception):
+    pass
 
 def execute_workflow(workflow, db):
     for item in workflow:
@@ -46,6 +49,22 @@ def setup_logging(filename, console_enabled):
 
     logging.addLevelName(FATAL_ERROR, 'FATAL')
 
+def get_last_loaded_day(db):
+    return db.execute_single_query("select palette.get_max_ts_date('palette', 'p_cpu_usage_report')")[0][0]
+
+def check_passed_2_am():
+    if datetime.datetime.today().hour < 2:
+        raise PaletteReportingNotAfter2AM("Error: Reporting cannot be executed before 2 AM.")
+
+def load_days(db, config, workflow_filename):
+    check_passed_2_am()
+    last_day = get_last_loaded_day(db)
+    today = datetime.datetime.today().date()
+    for i in range(1, (today - last_day).days):
+        load_date = last_day + datetime.timedelta(days=i)
+        workflow_doc = workflow.load_from_file(workflow_filename, config, load_date)
+        logging.info("Loading date: {}".format(load_date.isoformat()))
+        execute_workflow(workflow_doc, db)
 
 def main():
     try:
@@ -55,13 +74,10 @@ def main():
         setup_logging(config['Logfilename'], config['ConsoleLog'])
 
         logging.info('Start Insight Reporting.')
-
         workflow_filename = config['WorkflowFilename']
-        workflow_doc = workflow.load_from_file(workflow_filename, config)
-
         db = Database(config)
         logging.debug('Executing "{}" workflow'.format(workflow_filename))
-        execute_workflow(workflow_doc, db)
+        load_days(db, config, workflow_filename)
 
         logging.info('End Insight Reporting.')
     except Exception as exception:

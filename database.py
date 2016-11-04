@@ -49,3 +49,9 @@ class Database(object):
         self.connection.close()
         logging.debug("Database connection is closed")
 
+    def execute_single_query(self, query):
+        with self.connection as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+                records = cursor.fetchall()
+        return records
