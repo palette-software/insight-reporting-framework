@@ -86,6 +86,16 @@ def load_days(db, config, workflow_filename):
         execute_workflow(workflow_doc, db)
 
 
+def load(db, config, workflow_filename):
+    if config['WorkflowType'] == "Daily":
+        load_days(db, config, workflow_filename)
+    elif config['WorkflowType'] == "Delta":
+        workflow_doc = workflow.load_from_file(workflow_filename, config)
+        execute_workflow(workflow_doc, db)
+    else:
+        raise Exception("Invalid WorkflowType in the config.yml")
+
+
 def main():
     try:
         config_filename = sys.argv[1]
@@ -97,7 +107,7 @@ def main():
         workflow_filename = config['WorkflowFilename']
         db = Database(config)
         logging.debug('Executing "{}" workflow'.format(workflow_filename))
-        load_days(db, config, workflow_filename)
+        load(db, config, workflow_filename)
 
         logging.info('End Insight Reporting.')
     except Exception as exception:
