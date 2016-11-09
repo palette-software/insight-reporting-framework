@@ -53,7 +53,7 @@ def setup_logging(filename, console_enabled):
 
 
 def get_last_loaded_day(db):
-    return db.execute_single_query("select palette.get_max_ts_date('palette', 'p_cpu_usage_report')")[0][0]
+    return db.execute_single_query("select palette.get_max_ts_date('palette', 'p_cpu_usage_agg_report')")[0][0]
 
 
 def get_last_loadable_day(db, last_day):
