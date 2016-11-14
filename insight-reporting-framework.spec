@@ -18,14 +18,14 @@
 # Disable checking for unpackaged files ?
 #%undefine __check_files
 
-# Use md5 file digest method. 
+# Use md5 file digest method.
 # The first macro is the one used in RPM v4.9.1.1
 %define _binary_filedigest_algorithm 1
 # This is the macro I find on OSX when Homebrew provides rpmbuild (rpm v5.4.14)
 %define _build_binary_file_digest_algo 1
 
 # Use bzip2 payload compression
-%define _binary_payload w9.bzdio 
+%define _binary_payload w9.bzdio
 
 
 Name: palette-insight-reporting-framework
@@ -51,6 +51,8 @@ Packager: Palette Developers <developers@palette-software.com>
 # ============================================
 
 Requires(pre): postgresql-devel >= 8.4, python35u-devel >= 3.5
+
+Requires: palette-insight-toolkit
 
 %pre
 # noop
@@ -80,7 +82,7 @@ pip3 install -r /opt/insight-reporting-framework/requirements.txt
 %defattr(-,insight,insight,-)
 
 # Reject config files already listed or parent directories, then prefix files
-# with "/", then make sure paths with spaces are quoted. 
+# with "/", then make sure paths with spaces are quoted.
 # /usr/local/bin/palette-insight-server
 /opt/insight-reporting-framework
 /etc/palette-insight-server
