@@ -14,7 +14,7 @@ from jinja2 import Template
 FATAL_ERROR = 49
 
 
-class PaletteReportingNotAfter2AM(Exception):
+class PaletteReportingWorkflowError(Exception):
     pass
 
 
@@ -53,22 +53,21 @@ def setup_logging(filename, console_enabled):
 
 
 def get_last_loaded_day(db, schema_name):
-    return db.execute_single_query("select {schema_name}.get_max_ts_date('palette', 'p_cpu_usage_agg_report')".format(schema_name=schema_name))[0][0]
+    return db.execute_single_query("Get last loaded day", "select {schema_name}.get_max_ts_date('{schema_name}', 'p_cpu_usage_agg_report')".format(schema_name=schema_name))[0][0]
 
 
 def get_last_loadable_day(db, schema_name, last_day):
-    return db.execute_single_query(
-        "select coalesce(max(ts)::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day'".format(schema_name=schema_name, last_day=last_day))[0][0]
+    return db.execute_single_query("Get last loadable day",
+        "select coalesce((max(ts) - interval'1 day')::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day'".format(schema_name=schema_name, last_day=last_day))[0][0]
 
-
-def get_first_loadable_day(db, schema_name, last_day):
-    return db.execute_single_query(
+def get_next_day(db, schema_name, last_day):
+    return db.execute_single_query("Get next day",
         "select coalesce(min(ts)::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day'".format(schema_name=schema_name, last_day=last_day))[0][0]
 
 
 def check_passed_2_am():
     if datetime.datetime.today().hour < 2:
-        raise PaletteReportingNotAfter2AM("Error: Reporting cannot be executed before 2 AM.")
+        raise PaletteReportingWorkflowError("Error: Reporting cannot be executed before 2 AM.")
 
 
 def load_days(db, config, workflow_filename):
@@ -76,12 +75,15 @@ def load_days(db, config, workflow_filename):
     check_passed_2_am()
     last_loaded_day = get_last_loaded_day(db, schema_name)
     last_loadable_day = get_last_loadable_day(db, schema_name, last_loaded_day)
-    
-    if last_loaded_day == datetime.date(1001, 1, 1):
-        last_loaded_day = get_first_loadable_day(db, schema_name, last_loaded_day)
 
-    for i in range(1, (last_loadable_day - last_loaded_day).days):
-        load_date = last_loaded_day + datetime.timedelta(days=i)
+    if last_loaded_day == datetime.date(1001, 1, 1):
+        next_day = get_next_day(db, schema_name, last_loaded_day)
+    else:
+        next_day = last_loaded_day + datetime.timedelta(days=1)
+
+    top_limit = (last_loadable_day - next_day + datetime.timedelta(days=1)).days
+    for i in range(0, top_limit):
+        load_date = next_day + datetime.timedelta(days=i)
         workflow_doc = workflow.load_from_file(workflow_filename, config, load_date)
         logging.info("Loading date: {}".format(load_date.isoformat()))
         execute_workflow(workflow_doc, db)
