@@ -19,12 +19,12 @@ class Database(object):
 
     def execute(self, items):
         for item in items:
-            self.execute_single_query(item.name, item.query)
+            self.execute_single_query(item["name"], item["query"])
 
     def __execute_all(self, cursor, items):
         result = []
         for item in items:
-            result.append(self.__execute(cursor, name, query))
+            result.append(self.__execute(cursor, item["name"], item["query"]))
 
         return result
 
