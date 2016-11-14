@@ -34,7 +34,6 @@ class Database(object):
 
         if self.__has_no_records(cursor):
             logging.info('End "{}"'.format(name))
-            print("Had no records")
             return []
 
         records = cursor.fetchall()
