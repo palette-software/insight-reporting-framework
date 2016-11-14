@@ -50,7 +50,10 @@ Packager: Palette Developers <developers@palette-software.com>
 # Add the user for the service & setup SELinux
 # ============================================
 
-Requires(pre): postgresql-devel >= 8.4, python35u-devel >= 3.5
+Requires: postgresql-devel >= 8.4, python35u-devel >= 3.5
+
+# For the installation of psycopg2 package
+Requires: gcc
 
 Requires: palette-insight-toolkit
 
