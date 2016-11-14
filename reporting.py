@@ -13,11 +13,6 @@ from jinja2 import Template
 # We need a custom level to have 'FATAL' appear in log files (instead of CRITICAL)
 FATAL_ERROR = 49
 
-
-class PaletteReportingWorkflowError(Exception):
-    pass
-
-
 def execute_workflow(workflow, db):
     for item in workflow:
         logging.info('Start "{}"'.format(item['name']))
@@ -58,21 +53,16 @@ def get_last_loaded_day(db, schema_name):
 
 def get_last_loadable_day(db, schema_name, last_day):
     return db.execute_single_query("Get last loadable day",
-        "select coalesce((max(ts) - interval'1 day')::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day'".format(schema_name=schema_name, last_day=last_day))[0][0]
+        "select coalesce((max(ts) - interval'1 day')::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day' + interval'2 hours'".format(schema_name=schema_name, last_day=last_day))[0][0]
+
 
 def get_next_day(db, schema_name, last_day):
     return db.execute_single_query("Get next day",
         "select coalesce(min(ts)::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day'".format(schema_name=schema_name, last_day=last_day))[0][0]
 
 
-def check_passed_2_am():
-    if datetime.datetime.today().hour < 2:
-        raise PaletteReportingWorkflowError("Error: Reporting cannot be executed before 2 AM.")
-
-
 def load_days(db, config, workflow_filename):
     schema_name = config['Schema']
-    check_passed_2_am()
     last_loaded_day = get_last_loaded_day(db, schema_name)
     last_loadable_day = get_last_loadable_day(db, schema_name, last_loaded_day)
 
