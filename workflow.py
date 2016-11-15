@@ -6,10 +6,10 @@ QUERIES = 'queries'
 NAME = 'name'
 
 
-def load_from_file(filename, config):
+def load_from_file(filename, config, load_date=None):
     with open(filename) as workflow_file:
         workflow_text = workflow_file.read()
-        preprocessed_workflow = Template(workflow_text).render(**config)
+        preprocessed_workflow = Template(workflow_text).render(LoadDate=load_date, **config)
         workflow = yaml.load(preprocessed_workflow)
     return workflow
 

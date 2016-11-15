@@ -1,4 +1,4 @@
-Version: 2.0.1
+Version: 2.1.0
 Host: localhost
 Port: 5432
 User: palette_etl_user
@@ -8,3 +8,4 @@ Schema: palette
 WorkflowFilename: /etc/palette-insight-server/workflow_reporting.yml
 Logfilename: /var/log/insight-reporting-framework/reporting.log
 ConsoleLog: False
+WorkflowType: Daily
