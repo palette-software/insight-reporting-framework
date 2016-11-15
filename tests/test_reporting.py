@@ -10,12 +10,12 @@ class ReportingTest(unittest.TestCase):
 
     @mock.patch("psycopg2.connect")
     def test_last_loaded_day(self, mock_connect):
-        expected = [['1001-01-01']]
+        actual = [['1001-01-01']]
 
         mock_con = mock_connect.return_value.__enter__.return_value  # result of psycopg2.connect(**connection_stuff)
         mock_cur = mock_con.cursor.return_value.__enter__.return_value  # result of con.cursor(cursor_factory=DictCursor)
-        mock_cur.fetchall.return_value = expected  # return this when calling cur.fetchall()
-        mock_cur.rowcount = len(expected)
+        mock_cur.fetchall.return_value = actual  # return this when calling cur.fetchall()
+        mock_cur.rowcount = len(actual)
         mock_cur.statusmessage = ""
 
         db = Database({"Database": "fake", "User": "fake", "Password": "Fake", "Host": "Fake", "Port": 1, "Schema": "Fake"})

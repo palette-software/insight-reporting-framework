@@ -17,7 +17,7 @@ def execute_workflow(workflow, db):
     for item in workflow:
         logging.info('Start "{}"'.format(item['name']))
         if item.get('transaction', False):
-            db.execute_in_transaction(item['queries'])
+            db.execute_multiple_query(item['queries'])
         else:
             db.execute(item['queries'])
         logging.info('End "{}"'.format(item['name']))

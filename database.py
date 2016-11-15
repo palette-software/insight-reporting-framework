@@ -10,7 +10,7 @@ class Database(object):
         logging.debug("End creating database connection")
         self.schema_name = kwargs['Schema']
 
-    def execute_in_transaction(self, item):
+    def execute_multiple_query(self, item):
         if type(item) is list:
             with self.connection as connection:
                 with connection.cursor() as cursor:
