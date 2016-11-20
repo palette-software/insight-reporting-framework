@@ -53,7 +53,7 @@ def get_last_loaded_day(db, schema_name):
 
 def get_last_loadable_day(db, schema_name, last_day):
     return db.execute_single_query("Get last loadable day",
-        "select coalesce((max(ts) - interval'1 day')::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day' + interval'2 hours'".format(schema_name=schema_name, last_day=last_day))[0][0]
+        "select coalesce((max(ts) - interval'1 day' - interval'2 hours')::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'2 days'".format(schema_name=schema_name, last_day=last_day))[0][0]
 
 
 def get_next_day(db, schema_name, last_day):
