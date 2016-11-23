@@ -109,7 +109,7 @@ def load(db, config, workflow_filename):
 
 def log_load_control(filename, msg):
     with open(filename, "a") as out:
-        out.write(msg + " " + datetime.datetime.now().isoformat())
+        out.write(msg + " " + datetime.datetime.now().isoformat() + "\n")
 
 
 def main():
