@@ -107,10 +107,18 @@ def load(db, config, workflow_filename):
         raise Exception("Invalid WorkflowType in the config.yml")
 
 
+def log_load_control(filename, msg):
+    with open(filename, "a") as out:
+        out.write(msg + " " + datetime.datetime.now().isoformat())
+
+
 def main():
+
     try:
         config_filename = sys.argv[1]
         config = load_config(config_filename)
+
+        log_load_control(config['LoadControlLogFilename'], "Start reporting...")
 
         setup_logging(config['Logfilename'], config['ConsoleLog'])
 
@@ -121,6 +129,7 @@ def main():
         load(db, config, workflow_filename)
 
         logging.info('End Insight Reporting.')
+        log_load_control(config['LoadControlLogFilename'], "End reporting.")
     except Exception as exception:
         logging.log(FATAL_ERROR, 'Unhandled exception occurred: {}'.format(exception))
 
