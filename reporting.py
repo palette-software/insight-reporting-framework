@@ -67,6 +67,7 @@ def run_sh_command(cmd, output):
 
 
 def maintenance(config):
+    logging.info('Start maintenance.')
     log_load_control(config['LoadControlLogFilename'], "Start maintenance...")
     with open(config['LoadControlLogFilename'], "a") as out:
         run_sh_command(['sudo', '/opt/insight-toolkit/cleanup_insight_server_archive.sh'], out)
@@ -76,6 +77,7 @@ def maintenance(config):
             run_sh_command(['sudo', '-i', '-u', 'gpadmin', '/opt/insight-toolkit/db_maintenance.sh'], db_out)
 
     log_load_control(config['LoadControlLogFilename'], "End maintenance.")
+    logging.info('End maintenance.')
 
 def load_days(db, config, workflow_filename):
     schema_name = config['Schema']
