@@ -99,7 +99,9 @@ def load_days(db, config, workflow_filename):
 
 def load(db, config, workflow_filename):
     if config['WorkflowType'] == "Daily":
+        log_load_control(config['LoadControlLogFilename'], "Start reporting...")
         load_days(db, config, workflow_filename)
+        log_load_control(config['LoadControlLogFilename'], "End reporting.")
     elif config['WorkflowType'] == "Delta":
         workflow_doc = workflow.load_from_file(workflow_filename, config)
         execute_workflow(workflow_doc, db)
@@ -118,8 +120,6 @@ def main():
         config_filename = sys.argv[1]
         config = load_config(config_filename)
 
-        log_load_control(config['LoadControlLogFilename'], "Start reporting...")
-
         setup_logging(config['Logfilename'], config['ConsoleLog'])
 
         logging.info('Start Insight Reporting.')
@@ -129,7 +129,6 @@ def main():
         load(db, config, workflow_filename)
 
         logging.info('End Insight Reporting.')
-        log_load_control(config['LoadControlLogFilename'], "End reporting.")
     except Exception as exception:
         logging.log(FATAL_ERROR, 'Unhandled exception occurred: {}'.format(exception))
 
