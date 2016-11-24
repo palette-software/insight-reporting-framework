@@ -118,17 +118,6 @@ psql -tc "select 'vacuum analyze ' || schemaname || '.' || tablename || ';'
 
 log "End vacuum analyze history tables"
 
-log "Start vacuum analyze p_http_requests and p_background_jobs"
-
-psql $DBNAME 2>&1 <<EOF
-\set ON_ERROR_STOP on
-set search_path = $SCHEMA;
-vacuum analyze $SCHEMA.p_http_requests;
-vacuum $SCHEMA.p_background_jobs;
-EOF
-
-log "End vacuum analyze p_http_requests and p_background_jobs"
-
 log "Start drop old partitions by day"
 
 drop_old_partitions "'plainlogs', 'threadinfo', 'serverlogs', 'p_threadinfo', 'p_threadinfo_delta', 'p_serverlogs', 'p_cpu_usage', 'p_cpu_usage_report', 'p_serverlogs_bootstrap_rpt'" ${RETENTION_IN_DAYS}
@@ -160,7 +149,7 @@ from (
 	        pg_partitions p
 	where
 			p.partitionschemaname = '$SCHEMA' and
-	        p.tablename in ('p_interactor_session') and
+	        p.tablename in ('p_interactor_session', 'p_http_requests') and
 	        p.parentpartitiontablename is null) parts
 where
 	parts.rn = 1
@@ -173,7 +162,7 @@ psql $DBNAME -c "alter role readonly with CONNECTION LIMIT -1" 2>&1
 log "End set connection limit for readonly to -1"
 
 
-log "Start handle missing grants on tables,"
+log "Start handle missing grants on tables"
 
 psql -tc "select
 			case when r = 1 then owner_to_updater
@@ -237,6 +226,7 @@ if [ $(date +%u) -eq 7 ]; then
     analyze plainlogs;
     analyze p_threadinfo;
     analyze p_threadinfo_delta;
+    analyze rootpartition p_http_requests;
     analyze rootpartition plainlogs;
     analyze rootpartition serverlogs;
     analyze rootpartition threadinfo;
