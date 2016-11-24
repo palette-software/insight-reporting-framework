@@ -70,11 +70,11 @@ def maintenance(config):
     logging.info('Start maintenance.')
     log_load_control(config['LoadControlLogFilename'], "Start maintenance...")
     with open(config['LoadControlLogFilename'], "a") as out:
-        run_sh_command(['sudo', '/opt/insight-toolkit/cleanup_insight_server_archive.sh'], out)
-        run_sh_command(['sudo', '-i', '-u', 'gpadmin', '/opt/insight-toolkit/cleanup_db_log.sh'], out)
+        run_sh_command(['sudo', '/opt/insight-reporting-framework/cleanup_insight_server_archive.sh'], out)
+        run_sh_command(['sudo', '-i', '-u', 'gpadmin', '/opt/insight-reporting-framework/cleanup_db_log.sh'], out)
 
         with open(config['MaintenanceLogFilename'], 'w') as db_out:
-            run_sh_command(['sudo', '-i', '-u', 'gpadmin', '/opt/insight-toolkit/db_maintenance.sh'], db_out)
+            run_sh_command(['sudo', '-i', '-u', 'gpadmin', '/opt/insight-reporting-framework/db_maintenance.sh'], db_out)
 
     log_load_control(config['LoadControlLogFilename'], "End maintenance.")
     logging.info('End maintenance.')
