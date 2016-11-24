@@ -6,6 +6,7 @@ import workflow
 import sys
 import datetime
 from jinja2 import Template
+import subprocess
 
 # https://docs.python.org/3.5/library/logging.html#logging.addLevelName
 # https://docs.python.org/3.5/library/logging.html#logging-levels
@@ -61,6 +62,23 @@ def get_next_day(db, schema_name, last_day):
         "select coalesce(min(ts)::date, date'1001-01-01') from {schema_name}.p_threadinfo_delta where ts_rounded_15_secs >= date'{last_day}' + interval'1 day'".format(schema_name=schema_name, last_day=last_day))[0][0]
 
 
+def run_sh_command(cmd, output):
+    subprocess.run(args=cmd, stdout=output, stderr=output)
+
+
+def maintenance(config):
+    logging.info('Start maintenance.')
+    log_load_control(config['LoadControlLogFilename'], "Start maintenance...")
+    with open(config['LoadControlLogFilename'], "a") as out:
+        run_sh_command(['sudo', '/opt/insight-reporting-framework/cleanup_insight_server_archive.sh'], out)
+        run_sh_command(['sudo', '-i', '-u', 'gpadmin', '/opt/insight-reporting-framework/cleanup_db_log.sh'], out)
+
+    with open(config['MaintenanceLogFilename'], 'w') as db_out:
+        run_sh_command(['sudo', '-i', '-u', 'gpadmin', '/opt/insight-reporting-framework/db_maintenance.sh'], db_out)
+
+    log_load_control(config['LoadControlLogFilename'], "End maintenance.")
+    logging.info('End maintenance.')
+
 def load_days(db, config, workflow_filename):
     schema_name = config['Schema']
     last_loaded_day = get_last_loaded_day(db, schema_name)
@@ -73,6 +91,7 @@ def load_days(db, config, workflow_filename):
 
     top_limit = (last_loadable_day - next_day + datetime.timedelta(days=1)).days
     for i in range(0, top_limit):
+        maintenance(config)
         load_date = next_day + datetime.timedelta(days=i)
         workflow_doc = workflow.load_from_file(workflow_filename, config, load_date)
         logging.info("Loading date: {}".format(load_date.isoformat()))
@@ -81,7 +100,9 @@ def load_days(db, config, workflow_filename):
 
 def load(db, config, workflow_filename):
     if config['WorkflowType'] == "Daily":
+        log_load_control(config['LoadControlLogFilename'], "Start reporting...")
         load_days(db, config, workflow_filename)
+        log_load_control(config['LoadControlLogFilename'], "End reporting.")
     elif config['WorkflowType'] == "Delta":
         workflow_doc = workflow.load_from_file(workflow_filename, config)
         execute_workflow(workflow_doc, db)
@@ -89,7 +110,13 @@ def load(db, config, workflow_filename):
         raise Exception("Invalid WorkflowType in the config.yml")
 
 
+def log_load_control(filename, msg):
+    with open(filename, "a") as out:
+        out.write(msg + " " + datetime.datetime.now().isoformat() + "\n")
+
+
 def main():
+
     try:
         config_filename = sys.argv[1]
         config = load_config(config_filename)

@@ -9,3 +9,5 @@ WorkflowFilename: /etc/palette-insight-server/workflow_reporting.yml
 Logfilename: /var/log/insight-reporting-framework/reporting.log
 ConsoleLog: False
 WorkflowType: Daily
+MaintenanceLogFilename: /var/log/insight-reporting-framework/db_maintenance.log
+LoadControlLogFilename: /var/log/insight-reporting-framework/loadctrl.log

@@ -38,7 +38,8 @@ script:
   - cp -v ../*.sh opt/insight-reporting-framework
   - cp -v ../reporting-framework-config.yml etc/palette-insight-server
   - cp -v ../reporting-framework-delta-config.yml etc/palette-insight-server
-
+  - cp -v ../scripts/* opt/insight-reporting-framework
+  
   - echo "BUILDING VERSION:$VERSION"
 
   # build the rpm
