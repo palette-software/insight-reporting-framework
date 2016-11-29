@@ -26,7 +26,7 @@ def execute_workflow(workflow, db):
             logging.info('End "{}"'.format(item['name']))
         except Exception as ex:
             if "Table already contains data for the day." in str(ex):
-                logging.warning(str(ex))
+                logging.warning(str(ex), exc_info=1)
             else:
                 raise
 
