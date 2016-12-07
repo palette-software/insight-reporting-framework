@@ -50,7 +50,7 @@ def setup_logging(filename, console_enabled):
 
 
 def get_last_loaded_day(db, schema_name):
-    return db.execute_single_query("Get last loaded day", "select {schema_name}.get_max_ts_date('{schema_name}', 'p_cpu_usage_agg_report')".format(schema_name=schema_name))[0][0]
+    return db.execute_single_query("Get last loaded day", "select {schema_name}.get_max_ts_date('{schema_name}', 'p_load_dates')".format(schema_name=schema_name))[0][0]
 
 
 def get_last_loadable_day(db, schema_name, last_day):
