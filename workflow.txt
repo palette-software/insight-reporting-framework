@@ -84,11 +84,8 @@ PI_Report_p_cpu_usage_report_new
 	"select " + context.Target_Schema +".manage_partitions('" + context.Target_Schema +"', 'p_cpu_usage_report')"
 	"select "+ context.Target_Schema + ".load_from_stage_to_dwh('"+ context.Target_Schema + "', 'p_cpu_usage_report')"
 	
-Report_load_p_cpu_usage_agg_report
-	"truncate table "+ context.Target_Schema+".s_cpu_usage_agg_report;"
-	"select "+ context.Target_Schema + ".load_s_cpu_usage_agg_report('"+ context.Target_Schema + "') "
-	"select " + context.Target_Schema +".manage_partitions('" + context.Target_Schema +"', 'p_cpu_usage_agg_report')"
-	"select "+ context.Target_Schema + ".load_from_stage_to_dwh('"+ context.Target_Schema + "', 'p_cpu_usage_agg_report')"
+Insert new load date
+	"select insert_new_load_date('{{Schema}}', date'{{LoadDate}}');"
 
 Report_load_p_interactor_session
 	"truncate table "+ context.Target_Schema+".s_interactor_session;"
