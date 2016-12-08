@@ -118,6 +118,10 @@ psql -tc "select 'vacuum analyze ' || schemaname || '.' || tablename || ';'
 
 log "End vacuum analyze history tables"
 
+log "Start vacuum t_tde_filename_pids"
+psql $DBNAME -c "vacuum ${SCHEMA}.t_tde_filename_pids" 2>&1
+log "End vacuum t_tde_filename_pids"
+
 log "Start drop old partitions by day"
 
 drop_old_partitions "'plainlogs', 'threadinfo', 'serverlogs', 'p_threadinfo', 'p_threadinfo_delta', 'p_serverlogs', 'p_cpu_usage', 'p_cpu_usage_report', 'p_serverlogs_bootstrap_rpt'" ${RETENTION_IN_DAYS}
