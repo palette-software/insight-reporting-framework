@@ -17,18 +17,12 @@ FATAL_ERROR = 49
 
 def execute_workflow(workflow, db):
     for item in workflow:
-        try:
-            logging.info('Start "{}"'.format(item['name']))
-            if item.get('transaction', False):
-                db.execute_multiple_query(item['queries'])
-            else:
-                db.execute(item['queries'])
-            logging.info('End "{}"'.format(item['name']))
-        except Exception as ex:
-            if "Table already contains data for the day." in str(ex):
-                logging.warning(str(ex), exc_info=1)
-            else:
-                raise
+        logging.info('Start "{}"'.format(item['name']))
+        if item.get('transaction', False):
+            db.execute_multiple_query(item['queries'])
+        else:
+            db.execute(item['queries'])
+        logging.info('End "{}"'.format(item['name']))
 
 
 def load_config(filename):

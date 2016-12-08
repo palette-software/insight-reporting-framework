@@ -30,7 +30,19 @@ class Database(object):
 
     def __execute(self, cursor, name, query):
         logging.info('Start "{}"'.format(name))
-        cursor.execute(query)
+
+        # There is no better way to detect the case when we try to load
+        # a table that is already loaded. This can happen when a previous
+        # Reporting job did not completely finish. (Updating while reporting or simple machine stop
+        # When this occurs we should just move on with the remainder of the workflow.
+        # All other issues are real ones and raise them up
+        try:
+            cursor.execute(query)
+        except Exception as ex:
+            if "Table already contains data for the day." in str(ex):
+                logging.warning(str(ex), exc_info=1)
+            else:
+                raise
 
         if self.__has_no_records(cursor):
             logging.info('End "{}"'.format(name))
