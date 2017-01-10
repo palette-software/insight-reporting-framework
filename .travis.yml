@@ -27,32 +27,12 @@ before_script:
 script:
   - export VERSION_NUMBER="$(sed -n 's/Version. \([0-9]*\.[0-9]*\.[0-9]*$\)/\1/p' < reporting-framework-config.yml)"
   - export VERSION=v$VERSION_NUMBER.$TRAVIS_BUILD_NUMBER
-  - mkdir -p rpm-build
 
   # Run tests
   - python -m unittest
 
-  - pushd rpm-build
-  - mkdir -p _build
-
-  # Create directories
-  - mkdir -p opt/insight-reporting-framework
-  - mkdir -p var/log/insight-reporting-framework
-  - mkdir -p etc/palette-insight-server
-
-  # Copy the package contents
-  - cp -v ../*.py opt/insight-reporting-framework
-  - cp -v ../requirements.txt opt/insight-reporting-framework
-  - cp -v ../*.sh opt/insight-reporting-framework
-  - cp -v ../reporting-framework-config.yml etc/palette-insight-server
-  - cp -v ../reporting-framework-delta-config.yml etc/palette-insight-server
-  - cp -v ../scripts/* opt/insight-reporting-framework
-  
-  - echo "BUILDING VERSION:$VERSION"
-
-  # build the rpm
-  - rpmbuild -bb --buildroot $(pwd) --define "version $VERSION" --define "buildrelease $TRAVIS_BUILD_NUMBER" --define "_rpmdir $(pwd)/_build" ../insight-reporting-framework.spec
-  - popd
+  # Build rpm package
+  scripts/rpm.sh
 
 deploy:
   provider: script
