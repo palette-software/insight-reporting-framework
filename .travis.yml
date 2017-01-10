@@ -24,6 +24,10 @@ script:
   - export VERSION_NUMBER="$(sed -n 's/Version. \([0-9]*\.[0-9]*\.[0-9]*$\)/\1/p' < reporting-framework-config.yml)"
   - export VERSION=v$VERSION_NUMBER.$TRAVIS_BUILD_NUMBER
   - mkdir -p rpm-build
+
+  # Run tests
+  - python3 -m unittest
+
   - pushd rpm-build
   - mkdir -p _build
 
