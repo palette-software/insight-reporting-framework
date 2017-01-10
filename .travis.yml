@@ -32,7 +32,7 @@ script:
   - python -m unittest
 
   # Build rpm package
-  - scripts/rpm.sh
+  - ./create_rpm.sh
 
 deploy:
   provider: script
