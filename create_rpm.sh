@@ -37,5 +37,5 @@ cp -v ../scripts/* opt/insight-reporting-framework
 echo "BUILDING VERSION:v$VERSION"
 
 # build the rpm
-rpmbuild -bb --buildroot $(pwd) --define "version $VERSION" --define "buildrelease $TRAVIS_BUILD_NUMBER" --define "_rpmdir $(pwd)/_build" ../insight-reporting-framework.spec
+rpmbuild -bb --buildroot $(pwd) --define "version $VERSION" --define "buildrelease $PACKAGEVERSION" --define "_rpmdir $(pwd)/_build" ../insight-reporting-framework.spec
 popd
