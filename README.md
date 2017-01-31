@@ -5,11 +5,11 @@
 # Palette Reporting Framework
 
 [LoadTables]: https://github.com/palette-software/insight-gp-import
+[Data Model]: https://github.com/palette-software/insight-data-model
 ## What is Palette Reporting Framework?
 
-It processes the data loaded by [LoadTables] in multiple stages and makes it available
-for the **FIXME** [Palette Insight Reporting Workbooks] **FIXME**.
-The workflow for the data processing can be found in **TODO**.
+It processes the data loaded by [LoadTables] in multiple stages and makes it available for the Palette Insight Reporting Workbooks.
+The workflow for the data processing can be found in [Data Model].
 
 In this repository you will also find:
 
@@ -25,7 +25,7 @@ In this repository you will also find:
 ### Prerequisites
 
 - Palette Reporting Framework is compatible with Python 3.5
-- Workflow YAML files from the **TODO** repository
+- Workflow YAML files from the [Data Model] repository
 
 ### Packaging
 
@@ -74,8 +74,6 @@ python -m unittest
 
 ## Is Palette Reporting Framework supported?
 
-Palette Reporting Framework is licensed under the GNU GPLv3 license. For professional support please contact developers@palette-software.com
-
-**TODO: Clarify support part!**
+Palette Reporting Framework is licensed under the GNU GPL v3 license. For professional support please contact developers@palette-software.com
 
 Any bugs discovered should be filed in the [Palette Reporting Framework Git issue tracker](https://github.com/palette-software/insight-reporting-framework/issues) or contribution is more than welcome.
