@@ -124,7 +124,7 @@ log "End vacuum t_tde_filename_pids"
 
 log "Start drop old partitions by day"
 
-drop_old_partitions "'plainlogs', 'threadinfo', 'serverlogs', 'p_threadinfo', 'p_threadinfo_delta', 'p_serverlogs', 'p_cpu_usage', 'p_cpu_usage_report', 'p_serverlogs_bootstrap_rpt'" ${RETENTION_IN_DAYS}
+drop_old_partitions "'plainlogs', 'threadinfo', 'serverlogs', 'p_threadinfo', 'p_threadinfo_delta', 'p_serverlogs', 'p_cpu_usage', 'p_cpu_usage_report', 'p_serverlogs_bootstrap_rpt', 'p_errorlogs', 'p_high_load_threads'" ${RETENTION_IN_DAYS}
 
 log "End drop old partitions by day"
 
@@ -230,6 +230,8 @@ if [ $(date +%u) -eq 7 ]; then
     analyze plainlogs;
     analyze p_threadinfo;
     analyze p_threadinfo_delta;
+    analyze p_errorlogs;
+    analyze p_high_load_threads;
     analyze rootpartition p_http_requests;
     analyze rootpartition plainlogs;
     analyze rootpartition serverlogs;
@@ -237,6 +239,8 @@ if [ $(date +%u) -eq 7 ]; then
     analyze rootpartition p_serverlogs;    
     analyze rootpartition p_threadinfo;
     analyze rootpartition p_threadinfo_delta;
+    analyze rootpartition p_errorlogs;
+    analyze rootpartition p_high_load_threads;
     analyze rootpartition p_cpu_usage;
     analyze rootpartition p_cpu_usage_report;
     analyze rootpartition p_interactor_session;    

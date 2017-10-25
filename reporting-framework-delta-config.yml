@@ -5,6 +5,7 @@ User: palette_etl_user
 Password: palette123
 Database: palette
 Schema: palette
+ThreadHighLoadThreshold: 0.2
 WorkflowFilename: /etc/palette-insight-server/workflow_reporting_delta.yml
 Logfilename: /var/log/insight-reporting-framework/reporting_delta.log
 ConsoleLog: False
