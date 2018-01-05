@@ -1,6 +1,3 @@
-%define serviceuser insight
-%define servicehome /etc/palette-insight-server
-
 
 # Disable the stupid stuff rpm distros include in the build process by default:
 #   Disable any prep shell actions. replace them with simply 'true'
@@ -58,7 +55,8 @@ Requires: gcc
 Requires: palette-insight-toolkit
 
 %pre
-# noop
+# Stop if required palette packages are not installed
+rpm -q palette-insight-toolkit
 
 %postun
 # noop
