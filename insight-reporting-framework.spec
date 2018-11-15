@@ -86,7 +86,8 @@ pip3 install -r /opt/insight-reporting-framework/requirements.txt
 # with "/", then make sure paths with spaces are quoted.
 # /usr/local/bin/palette-insight-server
 /opt/insight-reporting-framework
-/etc/palette-insight-server
+/etc/palette-insight-server/reporting-framework-config.yml
+/etc/palette-insight-server/reporting-framework-delta-config.yml
 %dir /var/log/insight-reporting-framework
 
 # config files can be defined according to this
