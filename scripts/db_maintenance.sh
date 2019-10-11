@@ -122,6 +122,14 @@ log "Start vacuum t_tde_filename_pids"
 psql $DBNAME -c "vacuum ${SCHEMA}.t_tde_filename_pids" 2>&1
 log "End vacuum t_tde_filename_pids"
 
+
+log "Start vacuum http_requests and background_jobs"
+psql $DBNAME -c "vacuum ${SCHEMA}.http_requests" 2>&1
+psql $DBNAME -c "vacuum ${SCHEMA}.background_jobs" 2>&1
+
+log "End vacuum http_requests and background_jobs"
+
+
 log "Start drop old partitions by day"
 
 drop_old_partitions "'plainlogs', 'threadinfo', 'serverlogs', 'p_threadinfo', 'p_threadinfo_delta', 'p_serverlogs', 'p_cpu_usage', 'p_cpu_usage_report', 'p_serverlogs_bootstrap_rpt', 'p_errorlogs', 'p_high_load_threads'" ${RETENTION_IN_DAYS}
